@@ -1,0 +1,100 @@
+
+<div class="cuentas-section">
+  <div class="section-header">
+    <h1>Gestión de Cuentas Bancarias</h1>
+    <button *ngIf="!mostrarFormulario" class="btn btn-primary" (click)="abrirFormularioNuevo()">NUEVA CUENTA</button>
+  </div>
+  <div class="search-container" *ngIf="!mostrarFormulario">
+      <input type="text" placeholder="Buscar (numero de cuenta)" [(ngModel)]="terminoBusqueda" class="form-control.search">
+  </div>
+
+  <div *ngIf="!mostrarFormulario" class="table-container">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Numero de Cuenta</th>
+          <th>Cliente Asociado</th>
+          <th>Tipo</th>
+          <th>Saldo Inicial</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cuenta of cuentasFiltradas">
+          <td><strong>{{ cuenta.numeroCuenta }}</strong></td>
+          <td>{{ cuenta.cliente?.nombre }} ({{ cuenta.cliente?.clienteId }})</td>
+          <td>{{ cuenta.tipoCuenta }}</td>
+          <td>{{ cuenta.saldoInicial | currency:'USD':'symbol':'1.2-2' }}</td>
+          <td>
+            <span class="badge" [ngClass]="cuenta.estado ? 'badge-success' : 'badge-danger'">
+              {{ cuenta.estado ? 'Activa' : 'Inactiva' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-edit" (click)="seleccionarEditar(cuenta)">EDIT</button>
+            <button class="btn btn-delete" (click)="eliminarCuenta(cuenta.id!)">DEL</button>
+          </td>
+        </tr>
+        <tr *ngIf="cuentas.length === 0">
+          <td colspan="6" class="text-center">No hay cuentas bancarias configuradas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="form-container">
+    <h2>{{ editando ? 'Modificar Parametros de la Cuenta' : 'Apertura de Nueva Cuenta' }}</h2>
+    
+    <form [formGroup]="cuentaForm" (ngSubmit)="guardarCuenta()" class="responsive-form">
+      <div class="form-grid">
+        
+        <div class="form-group">
+          <label>Numero de Cuenta *</label>
+          <input type="text" formControlName="numeroCuenta" placeholder="Ej. 478758" [readOnly]="editando" oninput="if (this.value.length >15) this.value =  this.value.slice(0,15);">
+          <small class="error-msg" *ngIf="cuentaForm.get('numeroCuenta')?.touched && cuentaForm.get('numeroCuenta')?.errors?.['required']">El numero de cuenta es requerido.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Cliente Dueño de la Cuenta *</label>
+          <select formControlName="clienteId" [disabled]="editando">
+            <option value="">Seleccione el titular...</option>
+            <option *ngFor="let cte of clientes" [value]="cte.clienteId">
+              {{ cte.nombre }} ({{ cte.clienteId }})
+            </option>
+          </select>
+          <small class="error-msg" *ngIf="cuentaForm.get('clienteId')?.touched && cuentaForm.get('clienteId')?.errors?.['required']">Debe asignar un titular.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Cuenta *</label>
+          <select formControlName="tipoCuenta">
+            <option value="">Seleccione...</option>
+            <option value="Ahorro">Ahorros</option>
+            <option value="Corriente">Corriente</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Saldo Inicial de Apertura *</label>
+          <input type="number" formControlName="saldoInicial" placeholder="0.00" [readOnly]="editando" oninput="if (this.value.length >10) this.value =  this.value.slice(0,10);">
+          <small class="error-msg" *ngIf="cuentaForm.get('saldoInicial')?.touched && cuentaForm.get('saldoInicial')?.errors?.['min']">El saldo no puede ser negativo.</small>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="toggle">
+            <input type="checkbox" formControlName="estado">
+            <span class="slider"></span>
+            <span class="label-text">Cuenta Activa / Operativa</span>
+          </label>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="resetearVista()">Cancelar</button>
+        <button type="submit" class="btn btn-success" [disabled]="cuentaForm.invalid">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

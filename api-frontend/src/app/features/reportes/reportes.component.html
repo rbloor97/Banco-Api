@@ -1,0 +1,73 @@
+
+<div class="reportes-section">
+  <div class="section-header">
+    <h1>Estados de Cuenta Consolidados</h1>
+  </div>
+
+  <div class="filter-card">
+    <form [formGroup]="filtroForm" (ngSubmit)="consultarReporte()" class="filter-form">
+      
+      <div class="form-group">
+        <label>Titular / Cliente</label>
+        <select formControlName="clienteId">
+          <option value="">-- Seleccione un cliente --</option>
+          <option *ngFor="let c of clientes" [value]="c.clienteId">{{ c.nombre }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Desde</label>
+        <input type="date" formControlName="fechaInicio">
+      </div>
+
+      <div class="form-group">
+        <label>Hasta</label>
+        <input type="date" formControlName="fechaFin">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-search" [disabled]="buscando">
+        {{ buscando ? '⏳ ...' : 'Consultar' }}
+      </button>
+    </form>
+  </div>
+
+  <div *ngIf="reporteData" class="results-container animate-fade-in">
+    <div class="results-header">
+      <div>
+        <h3>Estado de Cuenta: {{ reporteData.cliente }}</h3>
+        <p class="subtitle">Periodo evaluado: {{ reporteData.rangoFechas }}</p>
+      </div>
+      <button class="btn btn-pdf" (click)="descargarPDF()">Descargar Reporte (PDF)</button>
+    </div>
+
+    <div class="table-container">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>No. Cuenta</th>
+            <th>Tipo</th>
+            <th>Saldo Inicial</th>
+            <th>Movimiento</th>
+            <th>Saldo Disponible</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let det of reporteData.detalles">
+            <td>{{ det.fecha }}</td>
+            <td><strong>{{ det.numeroCuenta }}</strong></td>
+            <td>{{ det.tipo }}</td>
+            <td>{{ det.saldoInicial | currency:'USD' }}</td>
+            <td [ngClass]="det.movimiento < 0 ? 'text-red' : 'text-green'">
+              <strong>{{ det.movimiento > 0 ? '+' : '' }}{{ det.movimiento | currency:'USD' }}</strong>
+            </td>
+            <td><strong>{{ det.saldoDisponible | currency:'USD' }}</strong></td>
+          </tr>
+          <tr *ngIf="reporteData.detalles?.length === 0">
+            <td colspan="6" class="text-center">No se registran movimientos en el rango de fechas seleccionado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

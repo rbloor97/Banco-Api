@@ -1,0 +1,22 @@
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <div class="brand">
+      <h2>BANCO DEVSU</h2>
+    </div>
+    <nav class="menu">
+      <a routerLink="/clientes" routerLinkActive="active" class="menu-item">👥 Clientes</a>
+      <a routerLink="/cuentas" routerLinkActive="active" class="menu-item">💳 Cuentas</a>
+      <a routerLink="/movimientos" routerLinkActive="active" class="menu-item">🔄 Movimientos</a>
+      <a routerLink="/reportes" routerLinkActive="active" class="menu-item">📊 Reportes</a>
+    </nav>
+  </aside>
+
+    <main class="main-content">
+    <header class="top-bar">
+      <span>Sistema de Gestion Bancaria v1.0</span>
+    </header>
+    <section class="content-body">
+      <router-outlet></router-outlet> 
+    </section>
+  </main>
+</div>

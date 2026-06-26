@@ -1,0 +1,48 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: banco-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: banco_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - banco-network
+
+  backend:
+    build: ./api-backend
+    container_name: banco-api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/banco_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - db
+    networks:
+      - banco-network
+
+  frontend:
+    build: ./api-frontend
+    container_name: banco-web
+    restart: always
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+    networks:
+      - banco-network
+
+volumes:
+  mysql_data:
+
+networks:
+  banco-network:
+    driver: bridge

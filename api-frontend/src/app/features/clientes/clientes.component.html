@@ -1,0 +1,117 @@
+<div class="clientes-section">
+  <div class="section-header">
+    <h1>Gestión de Clientes</h1>
+    <button *ngIf="!mostrarFormulario" class="btn btn-primary" (click)="abrirFormularioNuevo()">NUEVO CLIENTE</button>
+  </div>
+  <div class="search-container" *ngIf="!mostrarFormulario">
+      <input type="text" placeholder="Buscar (nombre,cedula o id)" [(ngModel)]="terminoBusqueda" class="form-control.search">
+  </div>
+
+  <div *ngIf="!mostrarFormulario" class="table-container">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>ID de Negocio</th>
+          <th>Nombre</th>
+          <th>Identificación</th>
+          <th>Edad</th>
+          <th>Telefono</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of clientesFiltrados">
+          <td>{{ cliente.clienteId }}</td>
+          <td>{{ cliente.nombre }}</td>
+          <td>{{ cliente.identificacion }}</td>
+          <td>{{ cliente.edad }}</td>
+          <td>{{ cliente.telefono || 'N/A' }}</td>
+          <td>
+            <span class="badge" [ngClass]="cliente.estado ? 'badge-success' : 'badge-danger'">
+              {{ cliente.estado ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-edit" (click)="seleccionarEditar(cliente)">EDIT</button>
+            <button class="btn btn-delete" (click)="eliminarCliente(cliente.id!)">DEL</button>
+          </td>
+        </tr>
+        <tr *ngIf="clientes.length === 0">
+          <td colspan="7" class="text-center">No hay clientes registrados en el sistema.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="form-container">
+    <h2>{{ editando ? 'Modificar Datos del Cliente' : 'Registrar Nuevo Cliente' }}</h2>
+    
+    <form [formGroup]="clienteForm" (ngSubmit)="guardarCliente()" class="responsive-form">
+      <div class="form-grid">
+        
+        <div class="form-group">
+          <label>Nombre Completo *</label>
+          <input type="text" formControlName="nombre" placeholder="Ej. Juan Perez" maxlength="40">
+          <small class="error-msg" *ngIf="clienteForm.get('nombre')?.touched && clienteForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Identificacion (Cedula) *</label>
+          <input type="text" formControlName="identificacion" placeholder="Solo numeros" maxlength="10">
+          <small class="error-msg" *ngIf="clienteForm.get('identificacion')?.touched && clienteForm.get('identificacion')?.errors?.['required']">La identificación es obligatoria.</small>
+        </div>
+
+        <div class="form-group">
+          <label>ID de Cliente (Negocio) *</label>
+          <input type="text" formControlName="clienteId" placeholder="Ej. JPEREZ" [readOnly]="editando" maxlength="20">
+        </div>
+
+        <div class="form-group" *ngIf="!editando">
+          <label>Contraseña *</label>
+          <input type="password" formControlName="contraseña" placeholder="Minimo 4 caracteres" maxlength="15">
+        </div>
+
+        <div class="form-group">
+          <label>Edad *</label>
+          <input type="number" formControlName="edad" placeholder="Minimo 18" oninput="if (this.value.length >3) this.value =  this.value.slice(0,3);">
+          <small class="error-msg" *ngIf="clienteForm.get('edad')?.touched && clienteForm.get('edad')?.errors?.['min']">Debe ser mayor de edad.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Genero *</label>
+          <select formControlName="genero">
+            <option value="">Seleccione...</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Telefono</label>
+          <input type="text" formControlName="telefono" placeholder="Ej. 0987654321" maxlength="15">
+        </div>
+
+        <div class="form-group">
+          <label>Direccion</label>
+          <input type="text" formControlName="direccion" placeholder="Calle principal y secundaria" maxlength="50">
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="toggle">
+            <input type="checkbox" formControlName="estado">
+            <span class="slider"></span>
+            <span class="label-text">Cliente Activo</span>
+          </label>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="resetearVista()">Cancelar</button>
+        <button type="submit" class="btn btn-success" [disabled]="clienteForm.invalid">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
