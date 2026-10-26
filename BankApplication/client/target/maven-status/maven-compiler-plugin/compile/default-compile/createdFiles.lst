@@ -1,0 +1,10 @@
+com/devsu/hackerearth/backend/client/model/Person.class
+com/devsu/hackerearth/backend/client/model/dto/ClientDto.class
+com/devsu/hackerearth/backend/client/ClientApplication.class
+com/devsu/hackerearth/backend/client/model/Base.class
+com/devsu/hackerearth/backend/client/repository/ClientRepository.class
+com/devsu/hackerearth/backend/client/controller/ClientController.class
+com/devsu/hackerearth/backend/client/model/Client.class
+com/devsu/hackerearth/backend/client/service/ClientServiceImpl.class
+com/devsu/hackerearth/backend/client/service/ClientService.class
+com/devsu/hackerearth/backend/client/model/dto/PartialClientDto.class

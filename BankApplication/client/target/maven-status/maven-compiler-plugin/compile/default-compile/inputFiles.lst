@@ -1,0 +1,10 @@
+/home/project/Microservices/BankApplication/client/src/main/java/com/devsu/hackerearth/backend/client/model/Person.java
+/home/project/Microservices/BankApplication/client/src/main/java/com/devsu/hackerearth/backend/client/service/ClientServiceImpl.java
+/home/project/Microservices/BankApplication/client/src/main/java/com/devsu/hackerearth/backend/client/model/dto/ClientDto.java
+/home/project/Microservices/BankApplication/client/src/main/java/com/devsu/hackerearth/backend/client/model/Client.java
+/home/project/Microservices/BankApplication/client/src/main/java/com/devsu/hackerearth/backend/client/ClientApplication.java
+/home/project/Microservices/BankApplication/client/src/main/java/com/devsu/hackerearth/backend/client/model/dto/PartialClientDto.java
+/home/project/Microservices/BankApplication/client/src/main/java/com/devsu/hackerearth/backend/client/model/Base.java
+/home/project/Microservices/BankApplication/client/src/main/java/com/devsu/hackerearth/backend/client/service/ClientService.java
+/home/project/Microservices/BankApplication/client/src/main/java/com/devsu/hackerearth/backend/client/controller/ClientController.java
+/home/project/Microservices/BankApplication/client/src/main/java/com/devsu/hackerearth/backend/client/repository/ClientRepository.java
